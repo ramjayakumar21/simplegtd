@@ -1,3 +1,11 @@
 .task-list {
     list-style-type: none;
 }
+
+.body {
+    display: flex;
+}
+
+.Task {
+    margin-left: 10px;
+}

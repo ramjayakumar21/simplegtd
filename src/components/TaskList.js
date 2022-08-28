@@ -1,5 +1,7 @@
 import React, { useState, useRef }  from "react";
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+import Task from "./Task.js"
+import "./TaskList.css"
 
 export default function TaskList(props) {
     const inputTextRef = useRef(null);
@@ -16,6 +18,7 @@ export default function TaskList(props) {
     else {
         
     }
+
     let taskList = {
         tasksArray: [
             taskFactory('task 1', 'high'),
@@ -24,8 +27,15 @@ export default function TaskList(props) {
     }
 
     
-    function removeTask() {
-        
+    function removeTask(id) {
+        let idArray = tasks.map((task) => task.id);
+        let oldTasks = Array.from(tasks);
+        let index = idArray.indexOf(id);
+
+        if (index > -1) { // only splice array when item is found
+            oldTasks.splice(index, 1); // 2nd parameter means remove one item only
+        }
+        updateTasks(oldTasks);
     }
     
 
@@ -38,8 +48,6 @@ export default function TaskList(props) {
         updateTasks(oldTasks)
         // localStorage.setItem(taskArray, oldTasks);
     }
-
-
    
     const [tasks, updateTasks] = useState(taskList.tasksArray);
 
@@ -47,14 +55,13 @@ export default function TaskList(props) {
         return ( 
         <Draggable key={task.id} draggableId={task.id} index={index}>
             {(provided) => 
-                <li className="task" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                    <h1>{task.name}</h1>
-                    <p>{task.priority}</p>
+                <li className="task-item" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                        <Task id={task.id} name={task.name} priority={task.priority} />
+                        <button id="delete-btn" className={task.id} onClick={() => removeTask(task.id)}>Delete</button>               
                 </li>}
         </Draggable>
         )
     })
-
 
 
     function handleOnDragEnd(result) {
@@ -70,9 +77,6 @@ export default function TaskList(props) {
             addTask();
         }
     }
-
-
-
 
     return (
         <div>

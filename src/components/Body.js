@@ -9,7 +9,10 @@ export default function Body() {
     return (
         <div>
             <h1>Current tasks</h1>
-            <TaskList />
+            <div className="body">
+                <TaskList />
+                <TaskList />
+            </div>
         </div>
     )
 }
