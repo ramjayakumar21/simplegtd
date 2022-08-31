@@ -1,31 +1,36 @@
 import React, { useState, useRef }  from "react";
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
-import Task from "./Task.js"
+import { Task, taskFactory } from "./Task.js"
 import "./TaskList.css"
 
 export default function TaskList(props) {
     const inputTextRef = useRef(null);
     const inputPriorityRef = useRef(null);
 
-    let taskFactory = (name, priority) => {
-        let id = `${name}+${Date.now()}`;
-        return {name, priority, id}
-    }
-
-    if (storageAvailable('localStorage')) {
-        // let taskList = localStorage.getItem(taskArray, taskList)
-    }
-    else {
-        
-    }
-
+    
     let taskList = {
         tasksArray: [
-            taskFactory('task 1', 'high'),
-            taskFactory('task 2', 'low'),
+            taskFactory('task 1', 'high', "30 mins"),
+            taskFactory('task 2', 'low', "30 mins"),
         ],
     }
+    
+    if (storageAvailable('localStorage')) {
+        taskList.tasksArray = JSON.parse(localStorage.getItem(`stored-tasks${props.listname}`)); 
+        console.log('access')
+    } 
 
+    const [tasks, updateTasks] = useState(taskList.tasksArray);
+
+    saveToStorage()
+
+
+    
+
+    function saveToStorage() {
+        localStorage.setItem(`stored-tasks${props.listname}`, JSON.stringify(tasks));
+        console.log('saved')
+    }
     
     function removeTask(id) {
         let idArray = tasks.map((task) => task.id);
@@ -36,28 +41,42 @@ export default function TaskList(props) {
             oldTasks.splice(index, 1); // 2nd parameter means remove one item only
         }
         updateTasks(oldTasks);
+        saveToStorage();
     }
     
 
 
     function addTask() {
-        let name = inputTextRef.current.value;
-        let priority = inputPriorityRef.current.value;
+        let title = inputTextRef.current.value;
+        inputTextRef.current.value = "";
+        // let priority = inputPriorityRef.current.value;
         let oldTasks = Array.from(tasks);
-        oldTasks.push(taskFactory(name, priority))
+        oldTasks.push(taskFactory(title, props.listname))
         updateTasks(oldTasks)
+        saveToStorage();
         // localStorage.setItem(taskArray, oldTasks);
     }
+
+    function editTask(id) {
+        let body = document.getElementById('body');
+        body.classList.add("active");
+    }
    
-    const [tasks, updateTasks] = useState(taskList.tasksArray);
+    
 
     let tasksList = tasks.map(({...task}, index) => {
         return ( 
         <Draggable key={task.id} draggableId={task.id} index={index}>
             {(provided) => 
                 <li className="task-item" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                        <Task id={task.id} name={task.name} priority={task.priority} />
-                        <button id="delete-btn" className={task.id} onClick={() => removeTask(task.id)}>Delete</button>               
+                        <Task 
+                            id={task.id} 
+                            title={task.title} 
+                            priority={task.priority} 
+                            time={task.time}
+                        />
+                        <button id="delete-btn" className={task.id} onClick={() => removeTask(task.id)}>Delete</button> 
+                        <button id="edit-btn" className={task.id} onClick={() => editTask(task.id)}>Edit</button>              
                 </li>}
         </Draggable>
         )
@@ -78,8 +97,12 @@ export default function TaskList(props) {
         }
     }
 
+
+ 
+
     return (
-        <div>
+        <div className="task-column">
+            <h1>{props.listname}</h1>
             <DragDropContext onDragEnd={handleOnDragEnd}>
             <Droppable droppableId="task-list" >
                 {(provided) =>
@@ -89,12 +112,7 @@ export default function TaskList(props) {
                     </ul>}
             </Droppable>
             </DragDropContext>
-            <input onKeyDown={handleEnterDown} ref={inputTextRef}></input>
-            <select ref={inputPriorityRef}>
-                <option value="high">High</option>
-                <option value="medium">Medium</option>
-                <option value="low">Low</option>
-            </select>
+            <input onKeyDown={handleEnterDown} ref={inputTextRef} placeholder={`Add ${props.listname} priority task`}></input>
         </div>
     )
 }
@@ -125,4 +143,4 @@ function storageAvailable(type) {
     }
   }
   
- 
+  

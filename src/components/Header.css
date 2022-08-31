@@ -1,0 +1,11 @@
+.header {
+    background-color: rgb(136, 105, 231);
+    min-height: 70px;
+    display: flex;
+}
+
+.header--title {
+    color: black;
+    align-self: center;
+    margin-left: 10px;
+}
