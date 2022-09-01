@@ -6,6 +6,8 @@ import "./TaskList.css"
 export default function TaskList(props) {
     const inputTextRef = useRef(null);
     const inputPriorityRef = useRef(null);
+    let activeModule = false;
+    let invisible = "invisible";
 
     
     let taskList = {
@@ -23,8 +25,6 @@ export default function TaskList(props) {
     const [tasks, updateTasks] = useState(taskList.tasksArray);
 
     saveToStorage()
-
-
     
 
     function saveToStorage() {
@@ -57,28 +57,23 @@ export default function TaskList(props) {
         // localStorage.setItem(taskArray, oldTasks);
     }
 
-    function editTask(id) {
-        let body = document.getElementById('body');
-        body.classList.add("active");
-    }
    
     
 
     let tasksList = tasks.map(({...task}, index) => {
         return ( 
-        <Draggable key={task.id} draggableId={task.id} index={index}>
-            {(provided) => 
-                <li className="task-item" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                        <Task 
-                            id={task.id} 
-                            title={task.title} 
-                            priority={task.priority} 
-                            time={task.time}
-                        />
-                        <button id="delete-btn" className={task.id} onClick={() => removeTask(task.id)}>Delete</button> 
-                        <button id="edit-btn" className={task.id} onClick={() => editTask(task.id)}>Edit</button>              
-                </li>}
-        </Draggable>
+            <Draggable key={task.id} draggableId={task.id} index={index}>
+                {(provided) =>
+                    <li className="task-item" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                            <Task
+                                id={task.id}
+                                title={task.title}
+                                priority={task.priority}
+                                time={task.time}
+                            />
+                            <button id="delete-btn" className={task.id} onClick={() => removeTask(task.id)}>Delete</button>
+                    </li>}
+            </Draggable>
         )
     })
 

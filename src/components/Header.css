@@ -1,11 +1,15 @@
 .header {
-    background-color: rgb(136, 105, 231);
+    background-color: rgb(175, 222, 255);
     min-height: 70px;
     display: flex;
+    justify-content: center;
 }
 
 .header--title {
     color: black;
     align-self: center;
-    margin-left: 10px;
+}
+
+.header--hamburger-map {
+    margin-right: auto;
 }
