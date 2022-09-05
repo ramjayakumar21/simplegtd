@@ -5,9 +5,10 @@ import "./TaskList.css"
 
 export default function TaskList(props) {
     const inputTextRef = useRef(null);
-    const inputPriorityRef = useRef(null);
+    const overlayRef = useRef(null);
     let activeModule = false;
     let invisible = "invisible";
+    let titleR, priorityR, notesR, timeR, dueDateRef = useRef(null);
 
     
     let taskList = {
@@ -17,7 +18,7 @@ export default function TaskList(props) {
         ],
     }
     
-    if (storageAvailable('localStorage')) {
+    if (storageAvailable('localStorage') && (null != JSON.parse(localStorage.getItem(`stored-tasks${props.listname}`)))) {
         taskList.tasksArray = JSON.parse(localStorage.getItem(`stored-tasks${props.listname}`)); 
         console.log('access')
     } 
@@ -57,11 +58,43 @@ export default function TaskList(props) {
         // localStorage.setItem(taskArray, oldTasks);
     }
 
-   
+    function editTask() {
+        overlayRef.current.style.display = 'block';
+    }
+
+   function taskEditor(task) {
+    
+
+
+    function updateTask() {
+        let newTask = taskFactory(
+            titleR.current.value, priorityR.current.value, timeR.current.value,
+            notesR.current.value, dueDateRef.current.value);
+
+    }
+
+
+    return (
+        <div>
+            <h1 contentEditable={true} suppressContentEditableWarning={true} ref={titleR}>{task.title}</h1>
+            <h2 contentEditable={true} suppressContentEditableWarning={true} ref={priorityR}>{task.priority}</h2>
+            <h2 contentEditable={true} suppressContentEditableWarning={true} ref={timeR}>{task.time}</h2>
+            <h2 contentEditable={true} suppressContentEditableWarning={true} ref={dueDateRef}>{task.dueDateRef}</h2>
+            <p contentEditable={true} suppressContentEditableWarning={true} ref={notesR}>{task.notes}</p>
+            <button onClick={() => {updateTask()}}>Save</button>
+        </div>
+    )
+   }
     
 
     let tasksList = tasks.map(({...task}, index) => {
         return ( 
+            <>
+            <div className="overlay" ref={overlayRef}>
+                <div className="editor">
+                    {taskEditor(task)}    
+                </div>
+            </div>
             <Draggable key={task.id} draggableId={task.id} index={index}>
                 {(provided) =>
                     <li className="task-item" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
@@ -71,9 +104,11 @@ export default function TaskList(props) {
                                 priority={task.priority}
                                 time={task.time}
                             />
-                            <button id="delete-btn" className={task.id} onClick={() => removeTask(task.id)}>Delete</button>
+                            <button className="delete-btn" id={task.id} onClick={() => removeTask(task.id)}>Delete</button>
+                            <button className="edit-btn" id={task.id} onClick={() => editTask(task.id)}>Edit</button>
                     </li>}
             </Draggable>
+            </>
         )
     })
 
@@ -96,6 +131,7 @@ export default function TaskList(props) {
  
 
     return (
+        <>
         <div className="task-column">
             <h1>{props.listname}</h1>
             <DragDropContext onDragEnd={handleOnDragEnd}>
@@ -109,6 +145,7 @@ export default function TaskList(props) {
             </DragDropContext>
             <input onKeyDown={handleEnterDown} ref={inputTextRef} placeholder={`Add ${props.listname} priority task`}></input>
         </div>
+        </>
     )
 }
 
