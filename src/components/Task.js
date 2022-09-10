@@ -2,6 +2,8 @@ import {React, useState} from "react";
 import "./Task.css";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faClock } from '@fortawesome/free-solid-svg-icons'
 
 export function Task(props) {
     const [show, setShow] = useState(false);
@@ -53,6 +55,8 @@ export function Task(props) {
             return newValue
         });
 
+        alert(`"${newTask.title}" was saved`)
+
     }
 
     return (
@@ -66,7 +70,8 @@ export function Task(props) {
           <Modal.Title>Modal title</Modal.Title>
         </Modal.Header>
             <Modal.Body>
-                <form>
+                <form className="editTaskForm">
+                    <label>Title</label>
                     <input
                         type="text"
                         placeholder="Title"
@@ -74,6 +79,8 @@ export function Task(props) {
                         name="title"
                         value={formData.title}
                     />
+                    <br></br>
+                    <label>Priority</label>
                     <input
                         type="text"
                         placeholder="Priority"
@@ -81,6 +88,8 @@ export function Task(props) {
                         name="priority"
                         value={formData.priority}
                     />
+                    <br></br>
+                    <label>Time Needed</label>
                     <input
                         type="text"
                         placeholder="Time"
@@ -88,20 +97,23 @@ export function Task(props) {
                         name="time"
                         value={formData.time}
                     />
-                    <Button onClick={handleSubmit}>Submit</Button>
+                    <br></br>
+                    <Button onClick={handleSubmit}>Save</Button>
                 </form>
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
                     Close
                 </Button>
-                <Button variant="primary" >Save</Button>
             </Modal.Footer>
         </Modal>
-            <h1 className="task--title">{props.task.title}</h1>
-            <p>{props.task.time}</p>
-            <button className="delete-btn" id={props.id} onClick={() => props.removeTask(props.id)}>Delete</button>
-            <button className="edit-btn" id={props.id}  onClick={handleShow}>Edit</button>
+            <div class="task">
+                <h1 className="task--title">{props.task.title}</h1>
+                <p> <FontAwesomeIcon className="time-icon" icon={faClock} ></FontAwesomeIcon>
+                    {props.task.time}</p>
+                <button className="delete-btn" id={props.id} onClick={() => props.removeTask(props.id)}>Delete</button>
+                <button className="edit-btn" id={props.id}  onClick={handleShow}>Edit</button>
+            </div>
 
 
         </>

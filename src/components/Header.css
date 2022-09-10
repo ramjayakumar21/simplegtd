@@ -1,13 +1,36 @@
+
 .header {
     background-color: rgb(191, 218, 238);
     min-height: 70px;
     display: flex;
-    justify-content: center;
+    align-items: center;
+    padding-left: 10px;
 }
+
+.header--icon {
+    height: 4vh;
+    padding: 3px;
+}
+
+.header--logo {
+    display: flex;
+    align-items: center;
+    background-color: azure;
+    border-radius: 5px;
+    max-width: 50vh;
+    max-height: 6vh;
+    padding: 2px;
+}
+
+
+
 
 .header--title {
     color: black;
     align-self: center;
+    margin: 0px;
+    font-size: 4vh;
+    font-weight: 300;
 }
 
 .header--hamburger-map {

@@ -113,7 +113,7 @@ export default function TaskList(props) {
 
     return (
         <>
-        <div className="task-column">
+        <div className={`task-column-${listKey}`}>
             <h1>{listname}</h1>
             <DragDropContext onDragEnd={handleOnDragEnd}>
                 <Droppable droppableId="task-list" key={'task'}>
@@ -125,7 +125,7 @@ export default function TaskList(props) {
                     )}
                 </Droppable>
             </DragDropContext>
-            <input onKeyDown={handleEnterDown} ref={inputTextRef} placeholder={`Add ${props.listname} priority task`}></input>
+            <input className='inputBox' onKeyDown={handleEnterDown} ref={inputTextRef} placeholder={`Add ${props.listname} priority task`}></input>
         </div>
         </>
     )

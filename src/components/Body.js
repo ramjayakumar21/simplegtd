@@ -31,10 +31,9 @@ export function Body() {
     
     return (
             <div className="body">
-                <Navbar />
-                <TaskList listname="High" listKey="highPriority" taskLibrary={taskLibrary} setTaskLibrary={setTaskLibrary} />
-                <TaskList listname="Medium" listKey="medPriority" taskLibrary={taskLibrary} setTaskLibrary={setTaskLibrary} />
-                <TaskList listname="Low" listKey="lowPriority" taskLibrary={taskLibrary} setTaskLibrary={setTaskLibrary} />
+                <TaskList listname="🔥 High" listKey="highPriority" taskLibrary={taskLibrary} setTaskLibrary={setTaskLibrary} />
+                <TaskList listname="🚧 Medium" listKey="medPriority" taskLibrary={taskLibrary} setTaskLibrary={setTaskLibrary} />
+                <TaskList listname="⛱ Low" listKey="lowPriority" taskLibrary={taskLibrary} setTaskLibrary={setTaskLibrary} />
             </div>
     )
 }
